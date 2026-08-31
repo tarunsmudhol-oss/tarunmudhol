@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tarun — Engineering under constraint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14161A;
+    --ink-60:#54585C;
+    --paper:#E6E7E1;
+    --paper-2:#DCDED6;
+    --rule:#B6B9AF;
+    --pine:#17513F;
+    --amber:#B8830F;
+    --rust:#8A3A20;
+    --display:"Bricolage Grotesque", system-ui, sans-serif;
+    --body:"Newsreader", Georgia, serif;
+    --mono:"IBM Plex Mono", ui-monospace, monospace;
+    --gut: clamp(16px, 4vw, 48px);
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:17px;
+    line-height:1.55;
+    background-image:linear-gradient(var(--paper-2) 1px, transparent 1px);
+    background-size:100% 34px;
+    background-position:0 -1px;
+  }
+
+  .sheet{
+    max-width:1080px;
+    margin:0 auto;
+    padding:0 var(--gut) 96px;
+  }
+
+  /* ---------- masthead ---------- */
+  .masthead{
+    padding:clamp(40px,7vw,80px) 0 0;
+  }
+  .stamp{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink-60);
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px 22px;
+    padding-bottom:14px;
+  }
+  .stamp b{font-weight:600;color:var(--ink)}
+
+  h1{
+    font-family:var(--display);
+    font-weight:800;
+    font-size:clamp(52px,12vw,132px);
+    line-height:.88;
+    letter-spacing:-.035em;
+    margin:.18em 0 .1em;
+  }
+  h1 .thin{font-weight:400;color:var(--ink-60)}
+
+  .thesis{
+    font-family:var(--body);
+    font-size:clamp(19px,2.4vw,25px);
+    line-height:1.45;
+    max-width:34ch;
+    margin:0 0 34px;
+  }
+  .thesis em{font-style:italic;color:var(--pine)}
+
+  /* ruled band that draws in on load */
+  .band{
+    border-top:1.5px solid var(--ink);
+    border-bottom:1.5px solid var(--ink);
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    margin:0 0 8px;
+  }
+  .band div{
+    padding:14px 16px 15px;
+    border-left:1px solid var(--rule);
+    font-family:var(--mono);
+    font-size:12px;
+    line-height:1.5;
+  }
+  .band div:first-child{border-left:0}
+  .band dt{
+    display:block;
+    font-size:10px;
+    letter-spacing:.13em;
+    text-transform:uppercase;
+    color:var(--ink-60);
+    margin-bottom:6px;
+  }
+  .band dd{margin:0;font-weight:500}
+
+  /* ---------- section headers ---------- */
+  section{padding-top:clamp(52px,7vw,88px)}
+  .sec-head{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    border-bottom:1.5px solid var(--ink);
+    padding-bottom:8px;
+    margin-bottom:0;
+  }
+  .sec-head h2{
+    font-family:var(--display);
+    font-weight:600;
+    font-size:clamp(22px,3.2vw,30px);
+    letter-spacing:-.02em;
+    margin:0;
+  }
+  .sec-head .note{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--ink-60);
+    margin-left:auto;
+  }
+
+  /* ---------- entries ---------- */
+  .entry{
+    display:grid;
+    grid-template-columns:230px 1fr;
+    gap:0 40px;
+    border-bottom:1px solid var(--rule);
+    padding:26px 0 30px;
+  }
+  .entry:hover .idx{color:var(--pine)}
+
+  .specs{font-family:var(--mono);font-size:11.5px;line-height:1.65}
+  .specs .row{
+    display:grid;
+    grid-template-columns:74px 1fr;
+    gap:10px;
+    padding:2px 0;
+  }
+  .specs .k{
+    font-size:10px;
+    letter-spacing:.11em;
+    text-transform:uppercase;
+    color:var(--ink-60);
+    padding-top:2px;
+  }
+  .specs .v{font-weight:500}
+
+  .idx{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.14em;
+    color:var(--ink-60);
+    display:block;
+    margin-bottom:10px;
+    transition:color .2s ease;
+  }
+
+  h3{
+    font-family:var(--display);
+    font-weight:600;
+    font-size:clamp(21px,2.6vw,27px);
+    letter-spacing:-.02em;
+    line-height:1.15;
+    margin:0 0 4px;
+  }
+  .sub{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.09em;
+    text-transform:uppercase;
+    color:var(--ink-60);
+    margin:0 0 12px;
+  }
+  .entry p{margin:0 0 10px;max-width:62ch}
+  .entry p:last-child{margin-bottom:0}
+
+  /* status lamp — the signature device */
+  .lamp{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.11em;
+    text-transform:uppercase;
+    font-weight:600;
+  }
+  .lamp::before{
+    content:"";
+    width:9px;height:9px;
+    flex:0 0 9px;
+    border:1.5px solid currentColor;
+  }
+  .lamp.live{color:var(--pine)}
+  .lamp.live::before{background:var(--pine)}
+  .lamp.proto{color:var(--amber)}
+  .lamp.proto::before{
+    background:repeating-linear-gradient(45deg,var(--amber) 0 2px,transparent 2px 4px);
+  }
+  .lamp.shelf{color:var(--rust)}
+  .lamp.shelf::before{background:transparent}
+
+  .tag{
+    font-family:var(--mono);
+    font-size:10.5px;
+    border:1px solid var(--rule);
+    padding:2px 7px;
+    margin:0 5px 5px 0;
+    display:inline-block;
+    background:rgba(255,255,255,.35);
+  }
+  .tags{margin-top:12px}
+
+  .caveat{
+    font-family:var(--mono);
+    font-size:11.5px;
+    line-height:1.6;
+    color:var(--ink-60);
+    border-left:2px solid var(--amber);
+    padding:2px 0 2px 12px;
+    margin-top:14px;
+    max-width:58ch;
+  }
+
+  /* ---------- coursework table ---------- */
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-family:var(--mono);
+    font-size:12.5px;
+  }
+  tbody tr{border-bottom:1px solid var(--rule)}
+  td{padding:11px 12px 11px 0;vertical-align:top}
+  td:first-child{width:34%;font-weight:500}
+  td:last-child{color:var(--ink-60);width:20%;text-align:right;padding-right:0}
+  @media (max-width:640px){
+    td:last-child{display:none}
+    td:first-child{width:44%}
+  }
+
+  /* ---------- footer ---------- */
+  footer{
+    padding-top:clamp(52px,7vw,88px);
+  }
+  .contact{
+    border-top:1.5px solid var(--ink);
+    padding-top:20px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px 40px;
+    font-family:var(--mono);
+    font-size:13px;
+  }
+  .contact a{
+    color:var(--ink);
+    text-decoration:none;
+    border-bottom:1.5px solid var(--pine);
+    padding-bottom:1px;
+  }
+  .contact a:hover{color:var(--pine)}
+  .contact span{
+    display:block;
+    font-size:10px;
+    letter-spacing:.13em;
+    text-transform:uppercase;
+    color:var(--ink-60);
+    margin-bottom:4px;
+  }
+  .colophon{
+    font-family:var(--mono);
+    font-size:10.5px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--ink-60);
+    margin-top:34px;
+  }
+
+  a:focus-visible,summary:focus-visible{
+    outline:2px solid var(--pine);
+    outline-offset:3px;
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width:820px){
+    .band{grid-template-columns:repeat(2,1fr)}
+    .band div:nth-child(3){border-left:0}
+    .band div:nth-child(-n+2){border-bottom:1px solid var(--rule)}
+    .entry{grid-template-columns:1fr;gap:16px}
+    .specs{order:2;padding-top:4px;border-top:1px solid var(--rule)}
+    .specs .row{grid-template-columns:80px 1fr}
+  }
+
+  /* ---------- motion ---------- */
+  @keyframes riseIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .masthead > *{animation:riseIn .6s cubic-bezier(.2,.7,.3,1) both}
+  .masthead > *:nth-child(1){animation-delay:.02s}
+  .masthead > *:nth-child(2){animation-delay:.08s}
+  .masthead > *:nth-child(3){animation-delay:.16s}
+  .masthead > *:nth-child(4){animation-delay:.24s}
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+  }
+</style>
+</head>
+<body>
+<main class="sheet">
+
+  <header class="masthead">
+    <div class="stamp">
+      <span><b>Tarun</b></span>
+      <span>B.Tech CSE · Reva University</span>
+      <span>Bengaluru, IN</span>
+      <span>Rev. 2026.08</span>
+    </div>
+
+    <h1>Builds that<br>run on <span class="thin">less.</span></h1>
+
+    <p class="thesis">Most of what I make has to work on a cheap phone, a free tier, or a $4 microcontroller. <em>Constraint is the design input</em>, not the excuse.</p>
+
+    <div class="band">
+      <div><dt>Focus</dt><dd>Backend · applied ML · embedded</dd></div>
+      <div><dt>Primary stack</dt><dd>Python / Flask · C · Postgres</dd></div>
+      <div><dt>Learning now</dt><dd>DSA in C++ · Java</dd></div>
+      <div><dt>Shipped live</dt><dd>1 of 3 builds</dd></div>
+    </div>
+  </header>
+
+  <section>
+    <div class="sec-head">
+      <h2>Building</h2>
+      <span class="note">Own initiative</span>
+    </div>
+
+    <article class="entry">
+      <div class="specs">
+        <div class="row"><span class="k">Status</span><span class="v"><span class="lamp proto">Prototype</span></span></div>
+        <div class="row"><span class="k">Role</span><span class="v">Sole builder</span></div>
+        <div class="row"><span class="k">Users</span><span class="v">0 — pre-launch</span></div>
+        <div class="row"><span class="k">Stack</span><span class="v">Flask · WhatsApp Cloud API · Gemini 1.5 Flash · Supabase</span></div>
+      </div>
+      <div>
+        <span class="idx">01 / VENTURE</span>
+        <h3>Yukshya</h3>
+        <p class="sub">A study assistant that lives inside WhatsApp</p>
+        <p>Students at tier-2 and tier-3 Indian colleges get very little academic help outside class hours, and most ed-tech assumes an app install, a good data plan, and comfort with an unfamiliar interface. That filters out the students who need it most.</p>
+        <p>Yukshya answers coursework questions over WhatsApp — no download, no new account, works on a low-end handset. Backend is Flask with rate limiting and SSE streaming; documents are encrypted at rest with AES-256-GCM; the model layer runs Gemini 1.5 Flash with an OpenRouter fallback so a single provider outage doesn't take the bot down. The whole production stack is chosen to cost nothing until there's revenue.</p>
+        <div class="tags">
+          <span class="tag">Meta WhatsApp Cloud API</span><span class="tag">Flask</span><span class="tag">Supabase Postgres</span><span class="tag">AES-256-GCM</span><span class="tag">SSE streaming</span><span class="tag">BYOK</span>
+        </div>
+        <p class="caveat">Honest status: the bot is substantially built and not yet deployed. Zero users means zero validation — right now this is a working prototype and a hypothesis, not a proven product. Next milestone is a live pilot on one campus.</p>
+      </div>
+    </article>
+
+    <article class="entry">
+      <div class="specs">
+        <div class="row"><span class="k">Status</span><span class="v"><span class="lamp live">Deployed</span></span></div>
+        <div class="row"><span class="k">Role</span><span class="v">Sole builder</span></div>
+        <div class="row"><span class="k">Host</span><span class="v">Vercel</span></div>
+        <div class="row"><span class="k">Stack</span><span class="v">Static HTML / CSS / JS</span></div>
+      </div>
+      <div>
+        <span class="idx">02 / SHIPPED</span>
+        <h3>GhatGuard</h3>
+        <p class="sub">Blind-curve warning for ghat roads</p>
+        <p>Ghat roads are single-lane hairpins with no sightline around the bend. GhatGuard is a deliberately tiny static site — no framework, no build step — so it loads on the patchy mobile signal you actually get in the hills. Deployed and live.</p>
+        <div class="tags">
+          <span class="tag">Vanilla JS</span><span class="tag">Static hosting</span><span class="tag">Low-bandwidth first</span>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>Applied systems</h2>
+      <span class="note">Team &amp; course projects</span>
+    </div>
+
+    <article class="entry">
+      <div class="specs">
+        <div class="row"><span class="k">Status</span><span class="v"><span class="lamp shelf">Built, not in production</span></span></div>
+        <div class="row"><span class="k">Role</span><span class="v">Team member</span></div>
+        <div class="row"><span class="k">Stack</span><span class="v">InsightFace Buffalo-L · FAISS · Python</span></div>
+      </div>
+      <div>
+        <span class="idx">03 / APPLIED ML</span>
+        <h3>Face recognition attendance</h3>
+        <p>Roll-call for a full lecture hall, done from one camera frame. Faces are encoded to 512-dimensional embeddings with InsightFace Buffalo-L and matched against an enrolled set using a FAISS index, so lookup stays fast as the roster grows instead of degrading linearly. I worked through the recognition pipeline and wrote the phased study plan the team followed.</p>
+        <div class="tags">
+          <span class="tag">Vector search</span><span class="tag">Embeddings</span><span class="tag">FAISS</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="entry">
+      <div class="specs">
+        <div class="row"><span class="k">Status</span><span class="v"><span class="lamp shelf">Concept + report</span></span></div>
+        <div class="row"><span class="k">Role</span><span class="v">Author</span></div>
+        <div class="row"><span class="k">Domain</span><span class="v">Agritech hardware</span></div>
+      </div>
+      <div>
+        <span class="idx">04 / CONCEPT</span>
+        <h3>KrishiScan</h3>
+        <p>A handheld farm diagnostic that pairs crop disease detection with soil analysis in one device, so a smallholder gets both readings on the spot instead of sending samples away. Documented as a full project report; no hardware prototype yet.</p>
+        <div class="tags">
+          <span class="tag">Computer vision</span><span class="tag">Sensor fusion</span><span class="tag">Embedded</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="entry">
+      <div class="specs">
+        <div class="row"><span class="k">Status</span><span class="v"><span class="lamp shelf">Coursework</span></span></div>
+        <div class="row"><span class="k">Role</span><span class="v">Builder</span></div>
+        <div class="row"><span class="k">Stack</span><span class="v">ESP32 · sensors</span></div>
+      </div>
+      <div>
+        <span class="idx">05 / IOT</span>
+        <h3>ESP32 builds</h3>
+        <p>Two IoT course projects on the same board: a voice assistant running the Xiaozhi firmware, and a soil moisture monitor that triggers irrigation on its own once readings fall past a threshold. Both taught the same lesson — on a microcontroller you budget for memory and power before you budget for features.</p>
+        <div class="tags">
+          <span class="tag">ESP32</span><span class="tag">Sensor loops</span><span class="tag">Automation</span>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>Coursework</h2>
+      <span class="note">Graded · Reva University</span>
+    </div>
+    <table>
+      <tbody>
+        <tr><td>2D ASCII graphics editor</td><td>Model-view architecture in C; separated render state from document state</td><td>C</td></tr>
+        <tr><td>Probability &amp; statistics</td><td>Z-tests, t-tests, chi-square, Markov chains</td><td>Math</td></tr>
+        <tr><td>Mechanical engineering fundamentals</td><td>Mechatronics, CNC, FDM printing, sensor selection</td><td>Core</td></tr>
+        <tr><td>Quantum computing primitives</td><td>CNOT and Toffoli gates; reversible logic</td><td>Elective</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>Also</h2>
+      <span class="note">Outside the syllabus</span>
+    </div>
+    <table>
+      <tbody>
+        <tr><td>MSME Idea Hackathon 6.0</td><td>Submitted application with system block diagram</td><td>2026</td></tr>
+        <tr><td>OpenRouter key tester</td><td>Full-stack tool: Flask + CORS + rate limiting, BYOK, browser client</td><td>Tooling</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer>
+    <div class="contact">
+      <div><span>Email</span><a href="mailto:ADD_YOUR_EMAIL">ADD_YOUR_EMAIL</a></div>
+      <div><span>GitHub</span><a href="#">github.com/ADD_HANDLE</a></div>
+      <div><span>LinkedIn</span><a href="#">linkedin.com/in/ADD_HANDLE</a></div>
+      <div><span>GhatGuard</span><a href="#">ADD_VERCEL_URL</a></div>
+    </div>
+    <p class="colophon">Status lamps: filled = live · hatched = built, unlaunched · hollow = documented only. Last revised August 2026.</p>
+  </footer>
+
+</main>
+</body>
+</html>
